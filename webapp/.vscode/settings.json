@@ -1,0 +1,7 @@
+{
+    "files.autoSave": "afterDelay",
+    "editor.fontSize": 15,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "python.pythonPath": "/home/ahmad/anaconda3/envs/fakenews/bin/python"
+}
