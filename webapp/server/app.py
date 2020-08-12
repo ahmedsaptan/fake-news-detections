@@ -46,7 +46,7 @@ def predict():
 def predictv1():
     post = request.get_json()['post']
     new_test = cleanup(post)
-
+    print(post)
     cnt = Counter()
     x_train = []
     x_train.append(new_test.split())

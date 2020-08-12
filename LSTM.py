@@ -1,5 +1,4 @@
-import numpy as np
-from keras.datasets import imdb
+import numpy as npz
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
