@@ -78,7 +78,7 @@ function DetectFake(props) {
             </div>
             <div className="field">
               <button className="ui button" onClick={(e) => onClickLink(e)}>
-                Submit
+                Pet Post
               </button>
             </div>
           </div>
@@ -97,7 +97,7 @@ function DetectFake(props) {
                 type="submit"
                 onClick={(e) => onClick(e)}
               >
-                Submit
+                Predict
               </button>
             </>
           )}
