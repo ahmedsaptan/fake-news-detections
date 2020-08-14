@@ -9,6 +9,7 @@ import os
 import getEmbeddings2
 import matplotlib.pyplot as plt
 import scikitplot.metrics as skplt
+import numpy as np
 
 top_words = 5000
 epoch_num = 5

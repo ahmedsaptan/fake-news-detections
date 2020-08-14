@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import image from "./../styles/images/img-01.png";
 import AuthService from "../services/auth.service";
 import "../styles/login/main.css";
 import "../styles/login/util.css";
 import { Link } from "react-router-dom";
+import { UserContext } from "../App";
 
 export default (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
-
+  const { _, setUser } = useContext(UserContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     AuthService.login(email, password)
       .then((response) => {
+        console.log(response);
+        setUser(response);
         setLoginError(false);
         props.history.push("/");
       })

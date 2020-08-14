@@ -1,0 +1,31 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: space-between;
+  justify-items: center;
+  grid-gap: 2rem;
+  margin-top: 5rem;
+}
+
+.gridItem {
+  width: auto;
+  height: auto;
+  border-radius: 10%;
+  box-shadow: 2px 2px 2px 2px gray;
+}
+
+.real {
+  background-image: linear-gradient(#76f576ab, #61fa6169, #05ff057c);
+}
+
+.fake {
+  background-image: linear-gradient(#f57676ab, #fa616169, #ff05057c);
+}
+
+
+.userName {
+    position: absolute;
+    left: 7%;
+    bottom: 4%;
+    color: white;
+}

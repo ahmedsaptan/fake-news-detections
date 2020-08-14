@@ -18,11 +18,10 @@ CORS(app)
 def predict():
     link = request.get_json()['link']
 
-    path = os.path.join(os.path.dirname(__file__), "chromedriver_linux64", "chromedriver")
 
-    options = webdriver.ChromeOptions()
+    options = webdriver.FirefoxOptions()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(executable_path=path)
+    driver = webdriver.Firefox(executable_path="/home/ahmad/Documents/fakenewdetection/webapp/server/drivers/geckodriver-v0.27.0-linux32/geckodriver")
     driver.get(link)
 
     soup = BeautifulSoup(driver.page_source, 'html.parser')

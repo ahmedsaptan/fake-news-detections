@@ -1,17 +1,28 @@
 const mongoose = require("mongoose");
 
-const New = mongoose.model("New", {
-  title: {
-    type: String,
-    trim: true,
+const newSchema = mongoose.Schema(
+  {
+    title: {
+      type: String,
+      trim: true,
+    },
+    content: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    isFake: {
+      type: Boolean,
+      default: false,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
-  content: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  fake: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { timestamps: true }
+);
+
+const New = mongoose.model("New", newSchema);
+
+module.exports = New;

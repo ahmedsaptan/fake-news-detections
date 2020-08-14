@@ -8,7 +8,6 @@ const userRouter = require("./src/routes/user");
 const newsRouter = require("./src/routes/news");
 
 app.use(express.json());
-app.use(express.urlencoded());
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(userRouter);

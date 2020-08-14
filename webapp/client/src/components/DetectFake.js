@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import axios from "axios";
+import UserService from "../services/user.service";
+import IconOk from "../static/icons8-ok-64.png";
+import IconNo from "../static/icons8-close-window-64.png";
 
 function DetectFake(props) {
   const [link, setLink] = useState("");
@@ -9,29 +10,27 @@ function DetectFake(props) {
   const [fake, setFake] = useState(false);
   const [real, setReal] = useState(false);
 
-  const onClick = async (e) => {
-    e.preventDefault();
+  const onSubmitForm = async () => {
+    setFake(false);
+    setReal(false);
+
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+      setLoading(true);
+      const res = await UserService.predict({ post }, true);
+      setLoading(false);
 
-      const res = await axios.post(
-        "http://localhost:5000/predict",
-        {
-          post,
-        },
-        config
-      );
-
-      if (res.data == 0) {
+      console.log(res.data);
+      if (res.data.label < 0.5) {
         setFake(true);
-      } else if (res.data == 1) {
+      } else if (res.data.label >= 0.5) {
         setReal(true);
       }
+
+      // setTimeout(() => {
+      //   props.history.push("/my-predictions");
+      // }, 5000);
     } catch (e) {
+      setLoading(false);
       console.log(e);
     }
   };
@@ -41,94 +40,111 @@ function DetectFake(props) {
     if (link !== "") {
       setLoading(true);
       try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-
-        const res = await axios.post(
-          "http://localhost:5000/get-post-data",
-          {
-            link,
-          },
-          config
-        );
+        const res = await UserService.GetPostFromLink(link, true);
 
         setPost(res.data);
-        setLoading(true);
+        setLoading(false);
       } catch (e) {
+        setLoading(false);
+
         console.log(e.message);
       }
+    } else {
+      alert("you Must enter a link");
     }
   };
   return (
-    <div>
-      <div className="ui container segment" style={{ marginTop: "10px" }}>
-        <form className="ui form">
+    <div className="ui container segment">
+      <form className="ui form">
+        <i
+          className="red huge newspaper icon"
+          style={{ display: "inline-block", marginRight: "1rem" }}
+        ></i>
+        <h2 className="ui dividing header" style={{ display: "inline-block" }}>
+          News Detection !{" "}
+        </h2>
+        <div className="field">
+          <i
+            className="blue big facebook icon"
+            style={{ display: "inline-block", marginRight: "10px" }}
+          ></i>
+          <h2 style={{ display: "inline-block" }}>FaceBook URL</h2>
           <div className="two fields">
             <div className="field">
-              <label>Facebook Post Link</label>
-              <textarea
-                placeholder="Paste Link Here and data will show "
-                rows="2"
+              <input
+                type="text"
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
-              ></textarea>
+                placeholder="Facebook Url here"
+              />
             </div>
             <div className="field">
-              <button className="ui button" onClick={(e) => onClickLink(e)}>
-                Pet Post
-              </button>
-            </div>
-          </div>
-          {!loading && (
-            <>
-              <div className="field">
-                <label>Post</label>
-                <textarea
-                  value={post}
-                  onChange={(e) => setPost(e.target.value)}
-                ></textarea>
-              </div>
               <button
-                disabled={post == ""}
-                className="ui button"
-                type="submit"
-                onClick={(e) => onClick(e)}
+                className="ui primary button"
+                onClick={(e) => onClickLink(e)}
               >
-                Predict
+                Get Post
               </button>
-            </>
-          )}
-        </form>
-        {loading && (
-          <div className="ui segment" style={{ padding: "40px 25px" }}>
-            <div className="ui active dimmer">
-              <div className="ui medium text loader">Loading</div>
             </div>
-            <p></p>
           </div>
-        )}
+        </div>
+        <div className="field" style={{ marginTop: "1rem" }}>
+          <i
+            className="blue big comment icon"
+            style={{ display: "inline-block", marginRight: "1rem" }}
+          ></i>
+          <h2 style={{ display: "inline-block" }}>Post Data</h2>
+          <div className="field">
+            <textarea
+              value={post}
+              onChange={(e) => setPost(e.target.value)}
+              spellCheck="false"
+              placeholder="Enter the post Data"
+            ></textarea>
+          </div>
+        </div>
 
-        {fake && (
-          <div className="ui red message">
-            <i className="star icon"></i>
-            Fake
-          </div>
-        )}
+        <div
+          className="ui primary button"
+          onClick={(e) => {
+            e.preventDefault();
+            onSubmitForm();
+          }}
+        >
+          Predict
+        </div>
+      </form>
 
-        {real && (
-          <div className="ui green message">
-            <i className="star icon"></i>
-            Real
+      {loading && (
+        <div className="ui segment" style={{ padding: "40px 25px" }}>
+          <div className="ui active dimmer">
+            <div className="ui medium text loader">Loading</div>
           </div>
-        )}
-      </div>
+          <p></p>
+        </div>
+      )}
+
+      {fake && (
+        <div
+          className="ui red message"
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          <img src={IconNo} />
+          <h3 style={{ margin: 0 }}>FAKE</h3>
+        </div>
+      )}
+
+      {real && (
+        <div
+          className="ui green message"
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          <img src={IconOk} />
+          <h3 style={{ margin: 0 }}>REAL</h3>
+        </div>
+      )}
     </div>
   );
 }
-
-DetectFake.propTypes = {};
 
 export default DetectFake;
